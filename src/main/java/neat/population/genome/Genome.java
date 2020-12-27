@@ -6,7 +6,7 @@ import java.util.List;
 public class Genome
 {
 
-    private final List<Connection> connections = new ArrayList<>();
+    private final List<Gene> genes = new ArrayList<>();
 
     private final int inputs;
     private final int outputs;
@@ -25,12 +25,37 @@ public class Genome
 
     public Genome(Genome genome)
     {
-        // TODO: Copy connections
+        // Copy data
+        for (Gene gene : genome.genes)
+        {
+            genes.add(new Gene(gene));
+        }
 
         inputs = genome.inputs;
         outputs = genome.outputs;
 
         nodes = genome.nodes;
+    }
+
+
+    public List<Gene> getGenes()
+    {
+        return genes;
+    }
+
+    public int getInputs()
+    {
+        return inputs;
+    }
+
+    public int getOutputs()
+    {
+        return outputs;
+    }
+
+    public int getNodes()
+    {
+        return nodes;
     }
 
 
@@ -45,6 +70,17 @@ public class Genome
 
         // TODO: Crossover genome
         return child;
+    }
+
+
+    private void addConnection()
+    {
+
+    }
+
+    private void addNode()
+    {
+
     }
 
 }
