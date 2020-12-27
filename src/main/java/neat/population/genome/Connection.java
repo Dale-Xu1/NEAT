@@ -1,5 +1,7 @@
 package neat.population.genome;
 
+import neat.population.innovation.History;
+
 public class Connection
 {
 
@@ -10,13 +12,13 @@ public class Connection
     private final int innovation;
 
 
-    public Connection(int in, int out, double weight)
+    public Connection(History history, int in, int out, double weight)
     {
         this.in = in;
         this.out = out;
 
         this.weight = weight;
-        this.innovation = 0;
+        this.innovation = history.getNumber(in, out);
     }
 
     public Connection(Connection connection)
