@@ -9,9 +9,13 @@ import java.util.List;
 public class Node
 {
 
+    private static final double MIN = 0.15;
+    private static final double MAX = 0.85;
+
+
     public static Node createInput(int i, int length)
     {
-        return new Node(0.15, (double) (i + 1) / (length + 2));
+        return new Node(MIN, (double) (i + 1) / (length + 2));
     }
 
     public static Node createBias(int length)
@@ -21,7 +25,13 @@ public class Node
 
     public static Node createOutput(int i, int length)
     {
-        return new Node(0.85, (double) (i + 1) / (length + 1));
+        return new Node(MAX, (double) (i + 1) / (length + 1));
+    }
+
+    public static Node createHidden(int length)
+    {
+        double margin = (double) 1 / (length + 1);
+        return new Node(Math.random() * (MAX - MIN) + MIN, Math.random() * (1 - 2 * margin) + margin);
     }
 
 

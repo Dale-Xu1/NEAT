@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import neat.network.Network;
 import neat.population.Population;
+import neat.population.genome.Genome;
 
 public class Main extends Application
 {
@@ -41,8 +42,11 @@ public class Main extends Application
 
     private void run()
     {
-        Network network = new Network(population.getBest());
-        network.render(gc, 100, 100, 300, 200);
+        Genome genome = population.getBest();
+        genome.mutate();
+
+        Network network = new Network(genome);
+        network.render(gc, 0, 0, 720, 480);
     }
 
 }

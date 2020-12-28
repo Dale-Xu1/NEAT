@@ -26,7 +26,6 @@ public class Genome
 
         // Calculate number of nodes (Extra 1 is for bias node)
         nodes = inputs + outputs + 1;
-        addGene();
     }
 
     public Genome(Genome genome)
@@ -69,6 +68,7 @@ public class Genome
 
     public void mutate()
     {
+        addGene();
         // TODO: Mutate genome
     }
 

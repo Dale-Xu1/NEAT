@@ -52,9 +52,10 @@ public class Network
             nodes[n] = node;
         }
 
+        int length = Math.max(inputs.length, outputs.length);
         for (; n < nodes.length; n++)
         {
-            nodes[n] = new Node(Math.random(), Math.random());
+            nodes[n] = Node.createHidden(length);
         }
     }
 
