@@ -9,6 +9,8 @@ import java.util.List;
 public class Node
 {
 
+    private static final double RADIUS = 10;
+
     private static final double MIN = 0.15;
     private static final double MAX = 0.85;
 
@@ -30,8 +32,13 @@ public class Node
 
     public static Node createHidden(int length)
     {
+        double space = 0.05;
         double margin = (double) 1 / (length + 1);
-        return new Node(Math.random() * (MAX - MIN) + MIN, Math.random() * (1 - 2 * margin) + margin);
+
+        return new Node(
+            Math.random() * (MAX - MIN - space * 2) + MIN + space,
+            Math.random() * (1 - 2 * margin) + margin
+        );
     }
 
 
@@ -69,8 +76,17 @@ public class Node
                 new Color(0, 0, 1, alpha));
             gc.setLineWidth(alpha * 3);
 
-            // Draw line connecting nodes
-            gc.strokeLine(in.x * w, in.y * h, x * w, y * h);
+            if (in == this)
+            {
+                // Draw square to represent recurrent connection
+                double height = RADIUS * 1.5;
+                gc.strokeRect(x * w - height, y * h - height, height * 2, height);
+            }
+            else
+            {
+                // Draw line connecting nodes
+                gc.strokeLine(in.x * w, in.y * h, x * w, y * h);
+            }
         }
     }
 
@@ -80,13 +96,11 @@ public class Node
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
 
-        double radius = 10;
-
         // Calculate position
-        double x = this.x * w - radius;
-        double y = this.y * h - radius;
+        double x = this.x * w - RADIUS;
+        double y = this.y * h - RADIUS;
 
-        double diameter = radius * 2;
+        double diameter = RADIUS * 2;
 
         // Draw circle with outline
         gc.fillOval(x, y, diameter, diameter);

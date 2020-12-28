@@ -26,6 +26,7 @@ public class Genome
 
         // Calculate number of nodes (Extra 1 is for bias node)
         nodes = inputs + outputs + 1;
+        addGene();
     }
 
     public Genome(Genome genome)
@@ -68,8 +69,12 @@ public class Genome
 
     public void mutate()
     {
-        addGene();
         // TODO: Mutate genome
+        for (int i = 0; i < 10; i++)
+        {
+            if ((Math.random() < 0.5)) addGene();
+            else addNode();
+        }
     }
 
     public Genome crossover(Genome genome)
@@ -83,13 +88,43 @@ public class Genome
 
     private void addGene()
     {
-        genes.add(new Gene(history, 0, 4));
-        genes.add(new Gene(history, 3, 5));
+        // Maximum gene length was reached
+        if (genes.size() >= nodes * nodes) return;
+
+        int in, out;
+        do
+        {
+            // Select random node pair until one is valid
+            in = (int) Math.floor(Math.random() * nodes);
+            out = (int) Math.floor(Math.random() * nodes);
+        }
+        while (!isValid(in, out));
+
+        genes.add(new Gene(history, in, out));
+    }
+
+    private boolean isValid(int in, int out)
+    {
+        // Tests if gene already exists
+        for (Gene gene : genes)
+        {
+            if (gene.getIn() == in && gene.getOut() == out) return false;
+        }
+
+        return true;
     }
 
     private void addNode()
     {
+        // Select random gene
+        Gene gene = genes.get((int) Math.floor(Math.random() * genes.size()));
+        gene.disable();
 
+        int node = nodes++; // Create node
+
+        // Create new connections
+        genes.add(new Gene(history, gene.getIn(), node, 1));
+        genes.add(new Gene(history, node, gene.getOut(), gene.getWeight()));
     }
 
 }

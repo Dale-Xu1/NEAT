@@ -34,6 +34,8 @@ public class Gene
         out = gene.out;
 
         weight = gene.weight;
+        enabled = gene.enabled;
+
         innovation = gene.innovation;
     }
 
@@ -58,6 +60,11 @@ public class Gene
         return enabled;
     }
 
+    public void disable()
+    {
+        enabled = false;
+    }
+
     public int getInnovation()
     {
         return innovation;
@@ -67,6 +74,12 @@ public class Gene
     public void mutate()
     {
 
+    }
+
+    public Gene crossover(Gene gene)
+    {
+        Gene child = new Gene(this);
+        return child;
     }
 
 }
