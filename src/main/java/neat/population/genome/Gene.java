@@ -97,10 +97,13 @@ public class Gene
         else weight += random.nextGaussian() * 0.05;
     }
 
-    public Gene crossover(Gene gene)
+    public void crossover(Gene gene)
     {
-        Gene child = new Gene(this);
-        return child;
+        // Randomly select weight between two parents
+        if (random.nextBoolean()) weight = gene.weight;
+
+        // Gene is disabled with a set chance if either parent is disabled
+        enabled = (enabled && gene.enabled) || random.nextDouble() > Population.DISABLE_GENE;
     }
 
 }

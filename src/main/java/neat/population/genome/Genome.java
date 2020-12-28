@@ -30,7 +30,7 @@ public class Genome
         addGene();
     }
 
-    private Genome(Genome genome)
+    public Genome(Genome genome)
     {
         population = genome.population;
 
@@ -83,12 +83,22 @@ public class Genome
         if (random.nextDouble() < Population.ADD_NODE) addNode();
     }
 
-    public Genome crossover(Genome genome)
+    public void crossover(Genome genome)
     {
-        Genome child = new Genome(this);
-
-        // TODO: Crossover genome
-        return child;
+        // Loop through genes
+        for (Gene gene : genes)
+        {
+            // Test if gene is a matching gene
+            for (Gene other : genome.genes)
+            {
+                if (gene.getInnovation() == other.getInnovation())
+                {
+                    // Crossover gene
+                    gene.crossover(other);
+                    break;
+                }
+            }
+        }
     }
 
 
