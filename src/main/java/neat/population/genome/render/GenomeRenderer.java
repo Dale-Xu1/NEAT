@@ -61,7 +61,7 @@ public class GenomeRenderer
 
         for (; n < nodes.length; n++)
         {
-            double margin = (double) 1 / (length + 1);
+            double margin = (double) 1 / (length + 2);
 
             nodes[n] = new Node(
                 random.nextDouble() * (MAX - MIN - SPACE * 2) + MIN + SPACE,
@@ -95,12 +95,12 @@ public class GenomeRenderer
 
             // Set color and width
             double weight = gene.getWeight();
-            double alpha = Math.abs(weight);
+            double alpha = Math.min(Math.abs(weight), 1);
 
             gc.setStroke((weight > 0) ?
                 new Color(1, 0, 0, alpha) :
                 new Color(0, 0, 1, alpha));
-            gc.setLineWidth(alpha * 3 + 1);
+            gc.setLineWidth(Math.abs(weight) * 3 + 1);
 
             if (in == out)
             {

@@ -70,12 +70,17 @@ public class Genome
 
     public void mutate()
     {
-        // TODO: Mutate genome
-        for (int i = 0; i < 10; i++)
+        Random random = population.getRandom();
+
+        // Mutate genes
+        for (Gene gene : genes)
         {
-            if ((population.getRandom().nextDouble() < 0.5)) addGene();
-            else addNode();
+            if (random.nextDouble() < Population.MUTATE_WEIGHT) gene.mutate();
         }
+
+        // Add connections and nodes
+        if (random.nextDouble() < Population.ADD_CONNECTION) addGene();
+        if (random.nextDouble() < Population.ADD_NODE) addNode();
     }
 
     public Genome crossover(Genome genome)

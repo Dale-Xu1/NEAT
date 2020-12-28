@@ -20,7 +20,7 @@ public class Main extends Application
     }
 
 
-    private final Population population = new Population(0);
+    private final Population population = new Population(15);
     private GraphicsContext gc;
 
 
@@ -43,7 +43,7 @@ public class Main extends Application
     private void run()
     {
         Genome genome = population.getBest();
-        genome.mutate();
+        for (int i = 0; i < 200; i++) genome.mutate();
 
         Network network = new Network(genome);
 

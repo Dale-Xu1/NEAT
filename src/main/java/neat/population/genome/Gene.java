@@ -8,6 +8,8 @@ import java.util.Random;
 public class Gene
 {
 
+    private final Random random;
+
     private final int in;
     private final int out;
 
@@ -19,6 +21,8 @@ public class Gene
 
     public Gene(Population population, int in, int out, double weight)
     {
+        random = population.getRandom();
+
         this.in = in;
         this.out = out;
 
@@ -32,14 +36,14 @@ public class Gene
     public Gene(Population population, int in, int out)
     {
         this(population, in, out, 0);
-
-        // Set random weight
-        Random random = population.getRandom();
-        weight = random.nextDouble() * 2 - 1;
+        weight = randomWeight();
     }
 
     public Gene(Gene gene)
     {
+        // Copy gene data
+        random = gene.random;
+
         in = gene.in;
         out = gene.out;
 
@@ -47,6 +51,11 @@ public class Gene
         enabled = gene.enabled;
 
         innovation = gene.innovation;
+    }
+
+    private double randomWeight()
+    {
+        return random.nextDouble() * 2 - 1;
     }
 
 
@@ -83,7 +92,9 @@ public class Gene
 
     public void mutate()
     {
-
+        // Either reset or randomly shift weight
+        if (random.nextDouble() < Population.RESET_WEIGHT) weight = randomWeight();
+        else weight += random.nextGaussian() * 0.05;
     }
 
     public Gene crossover(Gene gene)
