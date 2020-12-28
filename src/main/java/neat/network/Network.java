@@ -43,7 +43,7 @@ public class Network
         // Initialize connections
         for (Gene gene : genome.getGenes())
         {
-            if (!gene.isEnabled()) continue; // Don't add disabled genes
+            if (gene.isDisabled()) continue; // Don't add disabled genes
 
             Node in = nodes[gene.getIn()];
             Node out = nodes[gene.getOut()];

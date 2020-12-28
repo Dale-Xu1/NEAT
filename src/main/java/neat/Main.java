@@ -20,8 +20,7 @@ public class Main extends Application
     }
 
 
-    private final Population population = new Population();
-
+    private final Population population = new Population(0);
     private GraphicsContext gc;
 
 

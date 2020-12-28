@@ -1,6 +1,9 @@
 package neat.population.genome;
 
+import neat.population.Population;
 import neat.population.innovation.History;
+
+import java.util.Random;
 
 public class Gene
 {
@@ -14,18 +17,25 @@ public class Gene
     private final int innovation;
 
 
-    public Gene(History history, int in, int out, double weight)
+    public Gene(Population population, int in, int out, double weight)
     {
         this.in = in;
         this.out = out;
 
         this.weight = weight;
+
+        // Get innovation number
+        History history = population.getHistory();
         this.innovation = history.getNumber(in, out);
     }
 
-    public Gene(History history, int in, int out)
+    public Gene(Population population, int in, int out)
     {
-        this(history, in, out, Math.random() * 2 - 1); // TODO: Random with seed
+        this(population, in, out, 0);
+
+        // Set random weight
+        Random random = population.getRandom();
+        weight = random.nextDouble() * 2 - 1;
     }
 
     public Gene(Gene gene)
@@ -55,9 +65,9 @@ public class Gene
         return weight;
     }
 
-    public boolean isEnabled()
+    public boolean isDisabled()
     {
-        return enabled;
+        return !enabled;
     }
 
     public void disable()

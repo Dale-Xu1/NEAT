@@ -1,14 +1,15 @@
 package neat.population.genome;
 
-import neat.population.innovation.History;
+import neat.population.Population;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Genome
 {
 
-    private final History history;
+    private final Population population;
     private final List<Gene> genes = new ArrayList<>();
 
     private final int inputs;
@@ -17,9 +18,9 @@ public class Genome
     private int nodes;
 
 
-    public Genome(History history, int inputs, int outputs)
+    public Genome(Population population, int inputs, int outputs)
     {
-        this.history = history;
+        this.population = population;
 
         this.inputs = inputs;
         this.outputs = outputs;
@@ -31,7 +32,7 @@ public class Genome
 
     private Genome(Genome genome)
     {
-        history = genome.history;
+        population = genome.population;
 
         // Copy data
         for (Gene gene : genome.genes)
@@ -72,7 +73,7 @@ public class Genome
         // TODO: Mutate genome
         for (int i = 0; i < 10; i++)
         {
-            if ((Math.random() < 0.5)) addGene();
+            if ((population.getRandom().nextDouble() < 0.5)) addGene();
             else addNode();
         }
     }
@@ -91,40 +92,44 @@ public class Genome
         // Maximum gene length was reached
         if (genes.size() >= nodes * nodes) return;
 
+        Random random = population.getRandom();
         int in, out;
+
         do
         {
-            // Select random node pair until one is valid
-            in = (int) Math.floor(Math.random() * nodes);
-            out = (int) Math.floor(Math.random() * nodes);
+            // Select random node pair until one is valid;
+            in = random.nextInt(nodes);
+            out = random.nextInt(nodes);
         }
-        while (!isValid(in, out));
+        while (isInvalid(in, out));
 
-        genes.add(new Gene(history, in, out));
+        genes.add(new Gene(population, in, out));
     }
 
-    private boolean isValid(int in, int out)
+    private boolean isInvalid(int in, int out)
     {
         // Tests if gene already exists
         for (Gene gene : genes)
         {
-            if (gene.getIn() == in && gene.getOut() == out) return false;
+            if (gene.getIn() == in && gene.getOut() == out) return true;
         }
 
-        return true;
+        return false;
     }
 
     private void addNode()
     {
+        Random random = population.getRandom();
+
         // Select random gene
-        Gene gene = genes.get((int) Math.floor(Math.random() * genes.size()));
+        Gene gene = genes.get(random.nextInt(genes.size()));
         gene.disable();
 
         int node = nodes++; // Create node
 
         // Create new connections
-        genes.add(new Gene(history, gene.getIn(), node, 1));
-        genes.add(new Gene(history, node, gene.getOut(), gene.getWeight()));
+        genes.add(new Gene(population, gene.getIn(), node, 1));
+        genes.add(new Gene(population, node, gene.getOut(), gene.getWeight()));
     }
 
 }

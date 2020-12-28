@@ -8,10 +8,12 @@ import neat.population.genome.Gene;
 import neat.population.genome.Genome;
 
 import java.util.List;
+import java.util.Random;
 
 public class GenomeRenderer
 {
 
+    private static final int SEED = 0;
     private static final double RADIUS = 10;
 
     private static final double MIN = 0.1;
@@ -53,14 +55,17 @@ public class GenomeRenderer
             nodes[n] = node;
         }
 
+        // Hidden nodes are placed randomly
+        Random random = new Random(SEED);
         int length = Math.max(inputs, outputs);
+
         for (; n < nodes.length; n++)
         {
             double margin = (double) 1 / (length + 1);
 
             nodes[n] = new Node(
-                Math.random() * (MAX - MIN - SPACE * 2) + MIN + SPACE,
-                Math.random() * (1 - 2 * margin) + margin
+                random.nextDouble() * (MAX - MIN - SPACE * 2) + MIN + SPACE,
+                random.nextDouble() * (1 - 2 * margin) + margin
             );
         }
     }
@@ -82,6 +87,9 @@ public class GenomeRenderer
     {
         for (Gene gene : genes)
         {
+            // Don't render if disabled
+            if (gene.isDisabled()) continue;
+
             Node in = nodes[gene.getIn()];
             Node out = nodes[gene.getOut()];
 
@@ -92,7 +100,7 @@ public class GenomeRenderer
             gc.setStroke((weight > 0) ?
                 new Color(1, 0, 0, alpha) :
                 new Color(0, 0, 1, alpha));
-            gc.setLineWidth(alpha * 3);
+            gc.setLineWidth(alpha * 3 + 1);
 
             if (in == out)
             {
@@ -113,7 +121,8 @@ public class GenomeRenderer
         for (int i = 0; i < nodes.length; i++)
         {
             Node node = nodes[i];
-
+//        for (Node node : nodes)
+//        {
             gc.setFill(Color.WHITE);
             gc.setStroke(Color.BLACK);
             gc.setLineWidth(1);
@@ -128,12 +137,12 @@ public class GenomeRenderer
             gc.fillOval(x, y, diameter, diameter);
             gc.strokeOval(x, y, diameter, diameter);
 
-//            // Write node index
-//            gc.setTextAlign(TextAlignment.CENTER);
-//            gc.setTextBaseline(VPos.CENTER);
-//
-//            gc.setFill(Color.BLACK);
-//            gc.fillText(Integer.toString(i), x + RADIUS, y + RADIUS);
+            // Write node index
+            gc.setTextAlign(TextAlignment.CENTER);
+            gc.setTextBaseline(VPos.CENTER);
+
+            gc.setFill(Color.BLACK);
+            gc.fillText(Integer.toString(i), x + RADIUS, y + RADIUS);
         }
     }
 
