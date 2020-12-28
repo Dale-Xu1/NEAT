@@ -29,7 +29,7 @@ public class Genome
         addGene();
     }
 
-    public Genome(Genome genome)
+    private Genome(Genome genome)
     {
         history = genome.history;
 

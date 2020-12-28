@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import neat.network.Network;
 import neat.population.Population;
 import neat.population.genome.Genome;
+import neat.population.genome.GenomeRenderer;
 
 public class Main extends Application
 {
@@ -46,7 +47,9 @@ public class Main extends Application
         genome.mutate();
 
         Network network = new Network(genome);
-        network.render(gc, 0, 0, 720, 480);
+
+        GenomeRenderer renderer = new GenomeRenderer(genome);
+        renderer.render(gc, 0, 0, 720, 480);
     }
 
 }

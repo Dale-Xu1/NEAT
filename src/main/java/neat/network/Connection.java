@@ -13,15 +13,4 @@ public class Connection
         this.weight = weight;
     }
 
-
-    public Node getIn()
-    {
-        return in;
-    }
-
-    public double getWeight()
-    {
-        return weight;
-    }
-
 }
