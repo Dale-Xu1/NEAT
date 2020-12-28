@@ -9,6 +9,8 @@ public class Gene
     private final int out;
 
     private double weight;
+    private boolean enabled = true;
+
     private final int innovation;
 
 
@@ -23,7 +25,7 @@ public class Gene
 
     public Gene(History history, int in, int out)
     {
-        this(history, in, out, 1); // TODO: Random values
+        this(history, in, out, Math.random() * 2 - 1); // TODO: Random with seed
     }
 
     public Gene(Gene gene)
@@ -49,6 +51,11 @@ public class Gene
     public double getWeight()
     {
         return weight;
+    }
+
+    public boolean isEnabled()
+    {
+        return enabled;
     }
 
     public int getInnovation()

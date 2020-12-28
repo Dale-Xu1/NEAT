@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
+import neat.network.Network;
+import neat.population.Population;
 
 public class Main extends Application
 {
@@ -16,7 +18,9 @@ public class Main extends Application
     }
 
 
-    private static GraphicsContext gc;
+    private final Population population = new Population();
+
+    private GraphicsContext gc;
 
 
     @Override
@@ -24,16 +28,21 @@ public class Main extends Application
     {
         // Create canvas
         Canvas canvas = new Canvas(720, 480);
-        gc = canvas.getGraphicsContext2D();
-
         Group root = new Group(canvas);
+
+        gc = canvas.getGraphicsContext2D();
+        run();
 
         // Initialize stage
         stage.setTitle("NEAT");
         stage.setScene(new Scene(root));
         stage.show();
+    }
 
-        gc.fillRect(100, 100, 200, 100);
+    private void run()
+    {
+        Network network = new Network(population.getBest());
+        network.render(gc, 100, 100, 300, 200);
     }
 
 }
