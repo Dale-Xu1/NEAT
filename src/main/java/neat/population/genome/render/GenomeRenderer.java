@@ -1,42 +1,23 @@
-package neat.population.genome;
+package neat.population.genome.render;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import neat.population.genome.Gene;
+import neat.population.genome.Genome;
 
 import java.util.List;
 
 public class GenomeRenderer
 {
 
-    private static class Node
-    {
-        private final double x;
-        private final double y;
-
-        public Node(double x, double y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
-        public double getX()
-        {
-            return x;
-        }
-
-        public double getY()
-        {
-            return y;
-        }
-    }
-
-
     private static final double RADIUS = 10;
 
-    private static final double MIN = 0.15;
-    private static final double MAX = 0.85;
+    private static final double MIN = 0.1;
+    private static final double MAX = 0.9;
+
+    private static final double SPACE = 0.05;
 
 
     private final List<Gene> genes;
@@ -75,11 +56,10 @@ public class GenomeRenderer
         int length = Math.max(inputs, outputs);
         for (; n < nodes.length; n++)
         {
-            double space = 0.05;
             double margin = (double) 1 / (length + 1);
 
             nodes[n] = new Node(
-                Math.random() * (MAX - MIN - space * 2) + MIN + space,
+                Math.random() * (MAX - MIN - SPACE * 2) + MIN + SPACE,
                 Math.random() * (1 - 2 * margin) + margin
             );
         }
@@ -139,21 +119,21 @@ public class GenomeRenderer
             gc.setLineWidth(1);
 
             // Calculate position
-            double x = node.getX() * w;
-            double y = node.getY() * h;
+            double x = node.getX() * w - RADIUS;
+            double y = node.getY() * h - RADIUS;
 
             double diameter = RADIUS * 2;
 
             // Draw circle with outline
-            gc.fillOval(x - RADIUS, y - RADIUS, diameter, diameter);
-            gc.strokeOval(x - RADIUS, y - RADIUS, diameter, diameter);
+            gc.fillOval(x, y, diameter, diameter);
+            gc.strokeOval(x, y, diameter, diameter);
 
-            // Write node index
-            gc.setTextAlign(TextAlignment.CENTER);
-            gc.setTextBaseline(VPos.CENTER);
-
-            gc.setFill(Color.BLACK);
-            gc.fillText(Integer.toString(i), x, y);
+//            // Write node index
+//            gc.setTextAlign(TextAlignment.CENTER);
+//            gc.setTextBaseline(VPos.CENTER);
+//
+//            gc.setFill(Color.BLACK);
+//            gc.fillText(Integer.toString(i), x + RADIUS, y + RADIUS);
         }
     }
 

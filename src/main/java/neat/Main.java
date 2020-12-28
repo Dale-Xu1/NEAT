@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import neat.network.Network;
 import neat.population.Population;
 import neat.population.genome.Genome;
-import neat.population.genome.GenomeRenderer;
+import neat.population.genome.render.GenomeRenderer;
 
 public class Main extends Application
 {
