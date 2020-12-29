@@ -121,8 +121,7 @@ public class GenomeRenderer
         for (int i = 0; i < nodes.length; i++)
         {
             Node node = nodes[i];
-//        for (Node node : nodes)
-//        {
+
             gc.setFill(Color.WHITE);
             gc.setStroke(Color.BLACK);
             gc.setLineWidth(1);

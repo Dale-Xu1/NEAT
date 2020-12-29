@@ -54,4 +54,10 @@ public class Network
         }
     }
 
+
+    public void predict()
+    {
+        // TODO: Network prediction
+    }
+
 }

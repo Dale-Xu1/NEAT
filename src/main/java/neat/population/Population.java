@@ -36,12 +36,6 @@ public class Population
     }
 
 
-    public Genome getBest()
-    {
-        return new Genome(this, 3, 2);
-    }
-
-
     public History getHistory()
     {
         return history;
@@ -50,6 +44,12 @@ public class Population
     public Random getRandom()
     {
         return random;
+    }
+
+
+    public Genome getBest()
+    {
+        return new Genome(this, 3, 2);
     }
 
 }

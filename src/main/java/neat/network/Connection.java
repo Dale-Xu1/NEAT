@@ -13,4 +13,10 @@ public class Connection
         this.weight = weight;
     }
 
+
+    public double evaluate()
+    {
+        return in.evaluate() * weight;
+    }
+
 }

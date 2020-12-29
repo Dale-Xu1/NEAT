@@ -19,7 +19,7 @@ public class Main extends Application
     }
 
 
-    private final Population population = new Population(2);
+    private final Population population = new Population(4156);
     private GraphicsContext gc;
 
 
@@ -45,7 +45,6 @@ public class Main extends Application
         for (int i = 0; i < 100; i++) genome1.mutate();
 
         Genome genome2 = new Genome(genome1);
-
         for (int i = 0; i < 100; i++)
         {
             genome1.mutate();

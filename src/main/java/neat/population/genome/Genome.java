@@ -105,14 +105,14 @@ public class Genome
     private void addGene()
     {
         // Maximum gene length was reached
-        if (genes.size() >= nodes * nodes) return;
+        if (genes.size() >= nodes * (nodes - inputs - 1)) return;
 
         Random random = population.getRandom();
         int in, out;
 
         do
         {
-            // Select random node pair until one is valid;
+            // Select random node pair until one is valid
             in = random.nextInt(nodes);
             out = random.nextInt(nodes);
         }
@@ -123,6 +123,9 @@ public class Genome
 
     private boolean isInvalid(int in, int out)
     {
+        // Invalid if connection leads into input
+        if (out <= inputs) return true;
+
         // Tests if gene already exists
         for (Gene gene : genes)
         {
