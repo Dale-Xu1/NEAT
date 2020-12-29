@@ -7,7 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import neat.network.Network;
-import neat.population.Population;
+import neat.population.NEAT;
 import neat.population.genome.Genome;
 import neat.population.genome.render.GenomeRenderer;
 
@@ -20,7 +20,7 @@ public class Main extends Application
     }
 
 
-    private final Population population = new Population(110); // 4156
+    private final NEAT neat = new NEAT(110); // 4156
     private GraphicsContext gc;
 
 
@@ -42,7 +42,7 @@ public class Main extends Application
 
     private void run()
     {
-        Genome genome1 = population.getBest();
+        Genome genome1 = neat.getBest();
         for (int i = 0; i < 100; i++) genome1.mutate();
 
         Genome genome2 = new Genome(genome1);

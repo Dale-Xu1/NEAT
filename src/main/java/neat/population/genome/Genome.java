@@ -1,6 +1,6 @@
 package neat.population.genome;
 
-import neat.population.Population;
+import neat.population.NEAT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Random;
 public class Genome
 {
 
-    private final Population population;
+    private final NEAT neat;
     private final List<Gene> genes = new ArrayList<>();
 
     private final int inputs;
@@ -18,9 +18,9 @@ public class Genome
     private int nodes;
 
 
-    public Genome(Population population, int inputs, int outputs)
+    public Genome(NEAT neat, int inputs, int outputs)
     {
-        this.population = population;
+        this.neat = neat;
 
         this.inputs = inputs;
         this.outputs = outputs;
@@ -32,7 +32,7 @@ public class Genome
 
     public Genome(Genome genome)
     {
-        population = genome.population;
+        neat = genome.neat;
 
         // Copy data
         for (Gene gene : genome.genes)
@@ -70,17 +70,17 @@ public class Genome
 
     public void mutate()
     {
-        Random random = population.getRandom();
+        Random random = neat.getRandom();
 
         // Mutate genes
         for (Gene gene : genes)
         {
-            if (random.nextDouble() < Population.MUTATE_WEIGHT) gene.mutate();
+            if (random.nextDouble() < NEAT.MUTATE_WEIGHT) gene.mutate();
         }
 
         // Add connections and nodes
-        if (random.nextDouble() < Population.ADD_CONNECTION) addGene();
-        if (random.nextDouble() < Population.ADD_NODE) addNode();
+        if (random.nextDouble() < NEAT.ADD_CONNECTION) addGene();
+        if (random.nextDouble() < NEAT.ADD_NODE) addNode();
     }
 
     public void crossover(Genome genome)
@@ -107,7 +107,7 @@ public class Genome
         // Maximum gene length was reached
         if (genes.size() >= nodes * (nodes - inputs - 1)) return;
 
-        Random random = population.getRandom();
+        Random random = neat.getRandom();
         int in, out;
 
         do
@@ -118,7 +118,7 @@ public class Genome
         }
         while (isInvalid(in, out));
 
-        genes.add(new Gene(population, in, out));
+        genes.add(new Gene(neat, in, out));
     }
 
     private boolean isInvalid(int in, int out)
@@ -137,7 +137,7 @@ public class Genome
 
     private void addNode()
     {
-        Random random = population.getRandom();
+        Random random = neat.getRandom();
 
         // Select random gene
         Gene gene = genes.get(random.nextInt(genes.size()));
@@ -146,8 +146,8 @@ public class Genome
         int node = nodes++; // Create node
 
         // Create new connections
-        genes.add(new Gene(population, gene.getIn(), node, 1));
-        genes.add(new Gene(population, node, gene.getOut(), gene.getWeight()));
+        genes.add(new Gene(neat, gene.getIn(), node, 1));
+        genes.add(new Gene(neat, node, gene.getOut(), gene.getWeight()));
     }
 
 }

@@ -1,6 +1,6 @@
 package neat.population.genome;
 
-import neat.population.Population;
+import neat.population.NEAT;
 import neat.population.innovation.History;
 
 import java.util.Random;
@@ -19,9 +19,9 @@ public class Gene
     private final int innovation;
 
 
-    public Gene(Population population, int in, int out, double weight)
+    public Gene(NEAT neat, int in, int out, double weight)
     {
-        random = population.getRandom();
+        random = neat.getRandom();
 
         this.in = in;
         this.out = out;
@@ -29,13 +29,13 @@ public class Gene
         this.weight = weight;
 
         // Get innovation number
-        History history = population.getHistory();
+        History history = neat.getHistory();
         this.innovation = history.getNumber(in, out);
     }
 
-    public Gene(Population population, int in, int out)
+    public Gene(NEAT neat, int in, int out)
     {
-        this(population, in, out, 0);
+        this(neat, in, out, 0);
         weight = randomWeight();
     }
 
@@ -93,8 +93,8 @@ public class Gene
     public void mutate()
     {
         // Either reset or randomly shift weight
-        if (random.nextDouble() < Population.RESET_WEIGHT) weight = randomWeight();
-        else weight += random.nextGaussian() * 0.05;
+        if (random.nextDouble() < NEAT.RESET_WEIGHT) weight = randomWeight();
+        else weight += random.nextGaussian() * NEAT.SHIFT_WEIGHT;
     }
 
     public void crossover(Gene gene)
@@ -103,7 +103,7 @@ public class Gene
         if (random.nextBoolean()) weight = gene.weight;
 
         // Gene is disabled with a set chance if either parent is disabled
-        enabled = (enabled && gene.enabled) || random.nextDouble() > Population.DISABLE_GENE;
+        enabled = (enabled && gene.enabled) || random.nextDouble() > NEAT.DISABLE_GENE;
     }
 
 }

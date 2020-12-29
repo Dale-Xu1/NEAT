@@ -27,9 +27,29 @@ public class Species
 
     public boolean isCompatible(Genome genome)
     {
-        // TODO: Calculate genome distance
-        return false;
+        // Larger gene length
+        int normalizer = Math.max(representative.getGenes().size(), genome.getGenes().size()) - NEAT.MIN_NORMAL;
+        if (normalizer < 1) normalizer = 1;
+
+        // Calculate factors
+        int disjoint = disjointGenes(genome);
+        double weights = weightDifference(genome);
+
+        // Calculate distance
+        double distance = (NEAT.DISJOINT * disjoint) / normalizer + (NEAT.WEIGHTS * weights);
+        return distance < NEAT.THRESHOLD;
     }
+
+    private int disjointGenes(Genome genome)
+    {
+        return 0;
+    }
+
+    private double weightDifference(Genome genome)
+    {
+        return 0;
+    }
+
 
     public void add(Genome genome)
     {
