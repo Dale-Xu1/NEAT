@@ -1,5 +1,6 @@
 package neat.population;
 
+import neat.population.genome.Gene;
 import neat.population.genome.Genome;
 
 import java.util.ArrayList;
@@ -42,12 +43,50 @@ public class Species
 
     private int disjointGenes(Genome genome)
     {
-        return 0;
+        // Count number of matching genes
+        int matching = 0;
+
+        for (Gene gene : representative.getGenes())
+        {
+            // Loop through other genome to see if this gene exists there too
+            for (Gene other : genome.getGenes())
+            {
+                if (gene.getInnovation() == other.getInnovation())
+                {
+                    matching++;
+                    break;
+                }
+            }
+        }
+
+        // Total number of genes with the matching genes of each genome subtracted
+        return (representative.getGenes().size() + genome.getGenes().size()) - (matching * 2);
     }
 
     private double weightDifference(Genome genome)
     {
-        return 0;
+        double difference = 0;
+        int total = 0;
+
+        for (Gene gene : representative.getGenes())
+        {
+            // Loop through other genome to see if this gene exists there too
+            for (Gene other : genome.getGenes())
+            {
+                if (gene.getInnovation() == other.getInnovation())
+                {
+                    // Sum weight difference
+                    difference += Math.abs(gene.getWeight() - other.getWeight());
+                    total++;
+
+                    break;
+                }
+            }
+        }
+
+        // Take average
+        if (total == 0) return Double.MAX_VALUE; // No matching genes were found
+        return difference / total;
     }
 
 

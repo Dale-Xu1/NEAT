@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import neat.network.Network;
 import neat.population.NEAT;
+import neat.population.Species;
 import neat.population.genome.Genome;
 import neat.population.genome.render.GenomeRenderer;
 
@@ -20,7 +21,7 @@ public class Main extends Application
     }
 
 
-    private final NEAT neat = new NEAT(110); // 4156
+    private final NEAT neat = new NEAT(4156);
     private GraphicsContext gc;
 
 
@@ -54,6 +55,9 @@ public class Main extends Application
 
         new GenomeRenderer(genome1).render(gc, 0, 0, 360, 240);
         new GenomeRenderer(genome2).render(gc, 360, 0, 360, 240);
+
+        Species species = new Species(genome1);
+        System.out.println(species.isCompatible(genome2));
 
         Genome child = new Genome(genome1);
         child.crossover(genome2);
