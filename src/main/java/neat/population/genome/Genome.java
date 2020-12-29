@@ -1,12 +1,13 @@
 package neat.population.genome;
 
 import neat.population.NEAT;
+import neat.population.select.Selectable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Genome
+public class Genome implements Selectable
 {
 
     private final NEAT neat;
@@ -16,6 +17,7 @@ public class Genome
     private final int outputs;
 
     private int nodes;
+    private double fitness = 0;
 
 
     public Genome(NEAT neat, int inputs, int outputs)
@@ -30,6 +32,7 @@ public class Genome
         addGene();
     }
 
+    @SuppressWarnings("CopyConstructorMissesField")
     public Genome(Genome genome)
     {
         neat = genome.neat;
@@ -65,6 +68,17 @@ public class Genome
     public int getNodes()
     {
         return nodes;
+    }
+
+    @Override
+    public double getFitness()
+    {
+        return fitness;
+    }
+
+    public void setFitness(double fitness)
+    {
+        this.fitness = fitness;
     }
 
 

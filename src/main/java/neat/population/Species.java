@@ -2,27 +2,88 @@ package neat.population;
 
 import neat.population.genome.Gene;
 import neat.population.genome.Genome;
+import neat.population.select.Selectable;
+import neat.population.select.Selector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class Species
+public class Species implements Selectable
 {
 
+    private final Random random;
+
     private final Genome representative;
+
     private final List<Genome> genomes = new ArrayList<>();
+    private final Selector<Genome> selector;
+
+    private double fitness = 0;
 
 
-    public Species(Genome representative)
+    public Species(NEAT neat, Genome representative)
     {
+        random = neat.getRandom();
         this.representative = representative;
+
+        selector = new Selector<>(random, genomes);
     }
 
 
+    public List<Genome> getGenomes()
+    {
+        return genomes;
+    }
+
     public Genome getBest()
     {
-        // TODO: Find best genome
-        return representative;
+        Genome best = null;
+
+        for (Genome genome : genomes)
+        {
+            // Find best genome
+            if (best == null || genome.getFitness() > best.getFitness()) best = genome;
+        }
+
+        return best;
+    }
+
+    public Genome getChild()
+    {
+        // Select random genome and copy it
+        Genome child = new Genome(selector.select());
+
+        if (random.nextDouble() > NEAT.NO_CROSSOVER)
+        {
+            // Cross genome with another
+            child.crossover(selector.select());
+        }
+
+        // Wow this sounds weird
+        child.mutate();
+        return child;
+    }
+
+
+    public void calculateFitness()
+    {
+        double sum = 0;
+
+        for (Genome genome : genomes)
+        {
+            // Find sum of genome fitness
+            sum += genome.getFitness();
+        }
+
+        // Take average
+        fitness = sum / genomes.size();
+    }
+
+    @Override
+    public double getFitness()
+    {
+        return fitness;
     }
 
 
@@ -87,17 +148,6 @@ public class Species
         // Take average
         if (total == 0) return Double.MAX_VALUE; // No matching genes were found
         return difference / total;
-    }
-
-
-    public void add(Genome genome)
-    {
-        genomes.add(genome);
-    }
-
-    public boolean isEmpty()
-    {
-        return genomes.isEmpty();
     }
 
 }

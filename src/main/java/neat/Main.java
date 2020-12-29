@@ -43,7 +43,7 @@ public class Main extends Application
 
     private void run()
     {
-        Genome genome1 = neat.getBest();
+        Genome genome1 = new Genome(neat, 3, 2);
         for (int i = 0; i < 100; i++) genome1.mutate();
 
         Genome genome2 = new Genome(genome1);
@@ -56,12 +56,11 @@ public class Main extends Application
         new GenomeRenderer(genome1).render(gc, 0, 0, 360, 240);
         new GenomeRenderer(genome2).render(gc, 360, 0, 360, 240);
 
-        Species species = new Species(genome1);
-        System.out.println(species.isCompatible(genome2));
+        Species species = new Species(neat, genome1);
+        species.getGenomes().add(genome1);
+        species.getGenomes().add(genome2);
 
-        Genome child = new Genome(genome1);
-        child.crossover(genome2);
-
+        Genome child = species.getChild();
         new GenomeRenderer(child).render(gc, 180, 240, 360, 240);
 
         Network network = new Network(genome2);

@@ -2,7 +2,10 @@ package neat.population;
 
 import neat.population.genome.Genome;
 import neat.population.innovation.History;
+import neat.population.select.Selector;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class NEAT
@@ -25,6 +28,8 @@ public class NEAT
 
     private final History history = new History();
     private final Random random;
+
+    private final List<Species> species = new ArrayList<>();
 
 
     public NEAT(long seed)
@@ -51,7 +56,12 @@ public class NEAT
 
     public Genome getBest()
     {
-        return new Genome(this, 3, 2);
+        return null;
+    }
+
+    public void nextGeneration()
+    {
+
     }
 
 }
