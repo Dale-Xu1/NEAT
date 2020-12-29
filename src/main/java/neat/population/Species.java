@@ -51,13 +51,29 @@ public class Species implements Selectable
 
     public Genome getChild()
     {
-        // Select random genome and copy it
-        Genome child = new Genome(selector.select());
+        Genome child;
 
-        if (random.nextDouble() > NEAT.NO_CROSSOVER)
+        if (random.nextDouble() < NEAT.NO_CROSSOVER)
         {
-            // Cross genome with another
-            child.crossover(selector.select());
+            // Select random genome and copy it
+            child = new Genome(selector.select());
+        }
+        else
+        {
+            Genome parent1 = selector.select();
+            Genome parent2 = selector.select();
+
+            // Copy fitter of two parents and crossover with the other
+            if (parent1.getFitness() > parent2.getFitness())
+            {
+                child = new Genome(parent1);
+                child.crossover(parent2);
+            }
+            else
+            {
+                child = new Genome(parent2);
+                child.crossover(parent1);
+            }
         }
 
         // Wow this sounds weird
