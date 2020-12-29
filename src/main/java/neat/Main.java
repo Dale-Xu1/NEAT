@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
+import neat.network.Network;
 import neat.population.Population;
 import neat.population.genome.Genome;
 import neat.population.genome.render.GenomeRenderer;
@@ -19,7 +20,7 @@ public class Main extends Application
     }
 
 
-    private final Population population = new Population(4156);
+    private final Population population = new Population(110); // 4156
     private GraphicsContext gc;
 
 
@@ -58,6 +59,16 @@ public class Main extends Application
         child.crossover(genome2);
 
         new GenomeRenderer(child).render(gc, 180, 240, 360, 240);
+
+        Network network = new Network(genome2);
+
+        for (int i = 0; i < 10; i++)
+        {
+            double[] output = network.predict(new double[] { 0.6, 0.2, 0.4 });
+            for (double value : output) System.out.print(value + " ");
+
+            System.out.println();
+        }
     }
 
 }

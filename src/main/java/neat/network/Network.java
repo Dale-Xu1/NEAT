@@ -55,9 +55,34 @@ public class Network
     }
 
 
-    public void predict()
+    public double[] predict(double[] input)
     {
-        // TODO: Network prediction
+        if (input.length != inputs.length)
+        {
+            // Input lengths must match
+            throw new RuntimeException("Expected " + inputs.length + " inputs but got " + input.length);
+        }
+
+        // Set up nodes
+        for (Node node : nodes) node.initialize();
+
+        // Initialize input values
+        for (int i = 0; i < input.length; i++)
+        {
+            Node node = inputs[i];
+            node.initialize(input[i]);
+        }
+        bias.initialize(1);
+
+        // Evaluate outputs
+        double[] output = new double[outputs.length];
+        for (int i = 0; i < output.length; i++)
+        {
+            Node node = outputs[i];
+            output[i] = node.evaluate();
+        }
+
+        return output;
     }
 
 }

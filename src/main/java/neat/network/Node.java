@@ -6,6 +6,12 @@ import java.util.List;
 public class Node
 {
 
+    private static double sigmoid(double value)
+    {
+        return 1 / (1 + Math.pow(Math.E, -4.9 * value));
+    }
+
+
     private final List<Connection> connections = new ArrayList<>();
 
     private double value = 0.5;
@@ -17,6 +23,18 @@ public class Node
         connections.add(connection);
     }
 
+
+    public void initialize()
+    {
+        isEvaluated = false;
+    }
+
+    public void initialize(double value)
+    {
+        // Initialize an input
+        this.value = value;
+        isEvaluated = true;
+    }
 
     public double evaluate()
     {
@@ -31,8 +49,9 @@ public class Node
             sum += connection.evaluate();
         }
 
-        // TODO: Pass through activation
-        return sum;
+        // Pass through activation
+        value = sigmoid(sum);
+        return value;
     }
 
 }
