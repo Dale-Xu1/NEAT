@@ -1,7 +1,7 @@
 package neat.network;
 
-import neat.population.genome.Gene;
-import neat.population.genome.Genome;
+import neat.genome.Gene;
+import neat.genome.Genome;
 
 public class Network
 {

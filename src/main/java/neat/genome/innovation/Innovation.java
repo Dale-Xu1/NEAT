@@ -1,4 +1,4 @@
-package neat.population.innovation;
+package neat.genome.innovation;
 
 public class Innovation
 {

@@ -1,8 +1,7 @@
-package neat.population;
+package neat;
 
-import neat.population.genome.Genome;
-import neat.population.innovation.History;
-import neat.population.select.Selector;
+import neat.genome.Genome;
+import neat.genome.innovation.History;
 
 import java.util.ArrayList;
 import java.util.List;

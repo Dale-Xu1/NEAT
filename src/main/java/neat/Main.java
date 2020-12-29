@@ -7,10 +7,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import neat.network.Network;
-import neat.population.NEAT;
-import neat.population.Species;
-import neat.population.genome.Genome;
-import neat.population.genome.render.GenomeRenderer;
+import neat.genome.Genome;
+import neat.genome.render.GenomeRenderer;
 
 public class Main extends Application
 {

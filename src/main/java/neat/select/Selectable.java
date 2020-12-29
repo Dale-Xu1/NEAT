@@ -1,4 +1,4 @@
-package neat.population.select;
+package neat.select;
 
 public interface Selectable
 {

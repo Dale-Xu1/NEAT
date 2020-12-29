@@ -1,4 +1,4 @@
-package neat.population.select;
+package neat.select;
 
 import java.util.List;
 import java.util.Random;

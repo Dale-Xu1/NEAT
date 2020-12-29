@@ -1,11 +1,11 @@
-package neat.population.genome.render;
+package neat.genome.render;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
-import neat.population.genome.Gene;
-import neat.population.genome.Genome;
+import neat.genome.Gene;
+import neat.genome.Genome;
 
 import java.util.List;
 import java.util.Random;

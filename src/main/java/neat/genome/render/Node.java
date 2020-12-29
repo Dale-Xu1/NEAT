@@ -1,4 +1,4 @@
-package neat.population.genome.render;
+package neat.genome.render;
 
 class Node
 {

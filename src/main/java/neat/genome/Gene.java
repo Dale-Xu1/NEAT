@@ -1,7 +1,7 @@
-package neat.population.genome;
+package neat.genome;
 
-import neat.population.NEAT;
-import neat.population.innovation.History;
+import neat.NEAT;
+import neat.genome.innovation.History;
 
 import java.util.Random;
 

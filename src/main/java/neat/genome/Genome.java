@@ -1,7 +1,7 @@
-package neat.population.genome;
+package neat.genome;
 
-import neat.population.NEAT;
-import neat.population.select.Selectable;
+import neat.NEAT;
+import neat.select.Selectable;
 
 import java.util.ArrayList;
 import java.util.List;
