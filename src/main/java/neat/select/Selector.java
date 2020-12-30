@@ -45,7 +45,7 @@ public class Selector<T extends Selectable>
         }
 
         // Unreachable
-        throw new RuntimeException("Random number was larger than the fitness sum");
+        return null;
     }
 
 }

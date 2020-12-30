@@ -15,10 +15,9 @@ public class Species implements Selectable
     private final Random random;
 
     private final Genome representative;
-
     private final List<Genome> genomes = new ArrayList<>();
-    private final Selector<Genome> selector;
 
+    private final Selector<Genome> selector;
     private double fitness = 0;
 
 
@@ -30,11 +29,6 @@ public class Species implements Selectable
         selector = new Selector<>(random, genomes);
     }
 
-
-    public List<Genome> getGenomes()
-    {
-        return genomes;
-    }
 
     public Genome getBest()
     {
@@ -100,6 +94,17 @@ public class Species implements Selectable
     public double getFitness()
     {
         return fitness;
+    }
+
+
+    public void add(Genome genome)
+    {
+        genomes.add(genome);
+    }
+
+    public boolean isEmpty()
+    {
+        return genomes.isEmpty();
     }
 
 

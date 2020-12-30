@@ -5,10 +5,15 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import neat.network.Network;
 import neat.genome.Genome;
 import neat.genome.render.GenomeRenderer;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Main extends Application
 {
@@ -19,7 +24,7 @@ public class Main extends Application
     }
 
 
-    private final NEAT neat = new NEAT(4156);
+    private final NEAT neat = new NEAT(150, 2, 1, 0);
     private GraphicsContext gc;
 
 
@@ -41,35 +46,59 @@ public class Main extends Application
 
     private void run()
     {
-        Genome genome1 = new Genome(neat, 3, 2);
-        for (int i = 0; i < 100; i++) genome1.mutate();
-
-        Genome genome2 = new Genome(genome1);
         for (int i = 0; i < 100; i++)
         {
-            genome1.mutate();
-            genome2.mutate();
+            for (Genome genome : neat.getGenomes()) calculateFitness(genome);
+            neat.nextGeneration();
         }
+        for (Genome genome : neat.getGenomes()) calculateFitness(genome);
 
-        new GenomeRenderer(genome1).render(gc, 0, 0, 360, 240);
-        new GenomeRenderer(genome2).render(gc, 360, 0, 360, 240);
+        Genome genome = neat.getBest();
+        new GenomeRenderer(genome).render(gc, 0, 0, 720, 480);
 
-        Species species = new Species(neat, genome1);
-        species.getGenomes().add(genome1);
-        species.getGenomes().add(genome2);
+        Network network = new Network(genome);
 
-        Genome child = species.getChild();
-        new GenomeRenderer(child).render(gc, 180, 240, 360, 240);
-
-        Network network = new Network(genome2);
-
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
-            double[] output = network.predict(new double[] { 0.6, 0.2, 0.4 });
-            for (double value : output) System.out.print(value + " ");
+            for (int j = 0; j < 20; j++)
+            {
+                double brightness = network.predict(new double[] { (double) i / 20, (double) j / 20 })[0];
 
-            System.out.println();
+                gc.setFill(Color.color(brightness, brightness, brightness));
+                gc.fillRect(i * 5, j * 5, 5, 5);
+            }
         }
+
+        double a = network.predict(new double[] { 0, 0 })[0];
+        double b = network.predict(new double[] { 1, 0 })[0];
+        double c = network.predict(new double[] { 0, 1 })[0];
+        double d = network.predict(new double[] { 1, 1 })[0];
+
+        System.out.println(a + " " + b + " " + c + " " + d);
+    }
+
+    private void calculateFitness(Genome genome)
+    {
+        Network network = new Network(genome);
+
+        List<double[]> inputs = Arrays.asList(new double[][]
+        {
+            { 0, 0,  0 },
+            { 1, 0,  0 },
+            { 0, 1,  0 },
+            { 1, 1,  1 }
+        });
+        Collections.shuffle(inputs, neat.getRandom());
+
+        double difference = 0;
+        for (double[] input : inputs)
+        {
+            double prediction = network.predict(new double[] { input[0], input[1] })[0];
+            difference += Math.abs(prediction - input[2]);
+        }
+
+        double fitness = Math.pow(inputs.size() - difference, 2);
+        genome.setFitness(fitness);
     }
 
 }
