@@ -12,7 +12,7 @@ public class NEAT
 {
 
     public static final int MIN_NORMAL = 20; // Minimum gene length where normalizer is 1
-//    public static final int COPY_GENOME = 5; // TODO: Minimum genomes in a species for the best to be copied
+    public static final int COPY_GENOME = 5; // Minimum genomes in a species for the best to be copied
     public static final double DISJOINT = 1; // How much disjoint genes contribute to distance
     public static final double WEIGHTS = 0.4; // How much weight differences contribute to distance
     public static final double THRESHOLD = 3; // Distance threshold for whether is genome is part of a species

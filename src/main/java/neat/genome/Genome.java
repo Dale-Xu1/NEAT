@@ -78,6 +78,7 @@ public class Genome implements Selectable
 
     public void setFitness(double fitness)
     {
+        if (fitness < 0) throw new RuntimeException("Fitness cannot be negative");
         this.fitness = fitness;
     }
 

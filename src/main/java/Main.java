@@ -1,5 +1,3 @@
-package neat;
-
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -7,6 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import neat.NEAT;
 import neat.network.Network;
 import neat.genome.Genome;
 import neat.genome.render.GenomeRenderer;
@@ -24,7 +23,7 @@ public class Main extends Application
     }
 
 
-    private final NEAT neat = new NEAT(150, 2, 1, 0);
+    private final NEAT neat = new NEAT(500, 2, 1, 0);
     private GraphicsContext gc;
 
 
@@ -84,9 +83,9 @@ public class Main extends Application
         List<double[]> inputs = Arrays.asList(new double[][]
         {
             { 0, 0,  0 },
-            { 1, 0,  0 },
-            { 0, 1,  0 },
-            { 1, 1,  1 }
+            { 1, 0,  1 },
+            { 0, 1,  1 },
+            { 1, 1,  0 }
         });
         Collections.shuffle(inputs, neat.getRandom());
 

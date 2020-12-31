@@ -18,7 +18,9 @@ public class Species implements Selectable
     private final List<Genome> genomes = new ArrayList<>();
 
     private final Selector<Genome> selector;
-    private double fitness = 0;
+    private double fitness;
+
+    private boolean copyBest = false;
 
 
     public Species(NEAT neat, Genome representative)
@@ -33,7 +35,6 @@ public class Species implements Selectable
     public Genome getBest()
     {
         Genome best = null;
-
         for (Genome genome : genomes)
         {
             // Find best genome
@@ -45,8 +46,14 @@ public class Species implements Selectable
 
     public Genome getChild()
     {
-        Genome child;
+        if (copyBest)
+        {
+            // Copy best genome to next generation
+            copyBest = false;
+            return new Genome(getBest());
+        }
 
+        Genome child;
         if (random.nextDouble() < NEAT.NO_CROSSOVER)
         {
             // Select random genome and copy it
@@ -79,7 +86,6 @@ public class Species implements Selectable
     public void calculateFitness()
     {
         double sum = 0;
-
         for (Genome genome : genomes)
         {
             // Find sum of genome fitness
@@ -100,6 +106,12 @@ public class Species implements Selectable
     public void add(Genome genome)
     {
         genomes.add(genome);
+
+        // Species is allowed to copy its best genome
+        if (genomes.size() > NEAT.COPY_GENOME)
+        {
+            copyBest = true;
+        }
     }
 
     public boolean isEmpty()

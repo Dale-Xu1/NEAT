@@ -6,7 +6,7 @@ plugins {
 
 group 'org.example'
 version '1.0-SNAPSHOT'
-mainClassName = 'neat.Main'
+mainClassName = 'Main'
 
 javafx {
     version = '15.0.1'
