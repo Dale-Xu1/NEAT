@@ -79,16 +79,10 @@ public class NEAT
     public Genome getBest()
     {
         Genome best = null;
-
-        for (Species species : species)
+        for (Genome genome : genomes)
         {
-            Genome genome = species.getBest();
-
             // Find best genome
-            if (best == null || genome.getFitness() > best.getFitness())
-            {
-                best = genome;
-            }
+            if (best == null || genome.getFitness() > best.getFitness()) best = genome;
         }
 
         return best;
@@ -126,16 +120,16 @@ public class NEAT
 
     private void nextSpecies()
     {
-        List<Species> species = new ArrayList<>();
+        List<Species> next = new ArrayList<>();
 
-        for (Species old : this.species)
+        for (Species species : species)
         {
             // Create new species with old species's best genome as representative
-            Genome best = new Genome(old.getBest());
-            species.add(new Species(this, best));
+            Genome best = new Genome(species.getBest());
+            next.add(new Species(this, best));
         }
 
-        this.species = species;
+        species = next;
     }
 
     private void speciate()
