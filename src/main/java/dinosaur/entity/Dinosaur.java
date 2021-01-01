@@ -10,15 +10,27 @@ import javafx.scene.paint.Color;
 public class Dinosaur extends Entity
 {
 
+    private static final float SCALE = 100;
+    private static final Vector2 GRAVITY = new Vector2(0, -16);
+
+    private static final Vector2 STANDING = new Vector2(30, 50);
+    private static final Vector2 CROUCHING = new Vector2(50, 25);
+
+    private static final Vector2 JUMP = new Vector2(0, 5);
+    private static final Vector2 FALL = new Vector2(0, -40);
+
+
     private Vector2 velocity = new Vector2(0, 0);
 
     private boolean isJumping = false;
     private boolean isCrouching = false;
 
+    private boolean isGrounded = true;
+
 
     public Dinosaur()
     {
-        super(new Vector2(30, 0), new Vector2(30, 50)); // Crouching: (50, 25)
+        super(new Vector2(30, 0), STANDING);
 
         Input input = Input.getInstance();
 
@@ -30,7 +42,34 @@ public class Dinosaur extends Entity
     @Override
     public void update(float delta)
     {
-        if (isJumping) System.out.println("hi");
+        // Can only jump if on the ground and is not crouching
+        if (!isCrouching && isJumping && isGrounded)
+        {
+            isGrounded = false;
+            velocity = velocity.add(JUMP.mult(SCALE)); // Not multiplying by delta because jump is an impulse
+        }
+
+        // Change bounding box dimensions when crouching
+        dimensions = isCrouching ? CROUCHING : STANDING;
+
+        if (isCrouching)
+        {
+            // Fall down when crouching
+            velocity = velocity.add(FALL.mult(SCALE).mult(delta));
+        }
+
+        // Integrate physics
+        velocity = velocity.add(GRAVITY.mult(SCALE).mult(delta)); // Multiply by delta because gravity is a force
+        position = position.add(velocity.mult(delta));
+
+        if (position.y < 0)
+        {
+            // Prevent dinosaur from falling through the ground
+            position = new Vector2(position.x, 0);
+            velocity = new Vector2(velocity.x, 0);
+
+            isGrounded = true;
+        }
     }
 
     @Override
@@ -38,14 +77,6 @@ public class Dinosaur extends Entity
     {
         gc.setFill(Color.color(0, 0, 0, 0.3));
         gc.fillRect(position.x, position.y, dimensions.x, dimensions.y);
-    }
-
-    public void remove()
-    {
-        Input input = Input.getInstance();
-
-        input.unsubscribe(InputEvent.KEY_PRESSED, this::onKeyPressed);
-        input.unsubscribe(InputEvent.KEY_RELEASED, this::onKeyReleased);
     }
 
 
