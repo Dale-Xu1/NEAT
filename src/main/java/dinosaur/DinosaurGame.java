@@ -59,7 +59,7 @@ public class DinosaurGame extends Group
     private final float delta = 0.02f;
 
     private final List<Obstacle> obstacles = new ArrayList<>();
-    private final Dinosaur dinosaur = new Dinosaur();
+    private final Dinosaur dinosaur = new Dinosaur(obstacles);
 
     private final ObstacleSpawner spawner = new ObstacleSpawner(obstacles, width);
 
@@ -101,7 +101,9 @@ public class DinosaurGame extends Group
             }
         }
 
+        // Update dinosaur
         dinosaur.update(delta);
+        if (dinosaur.isDead()) timer.stop();
     }
 
     private void render()
