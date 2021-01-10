@@ -46,6 +46,11 @@ public class ObstacleSpawner
         }
     }
 
+    public void reset()
+    {
+        // TODO: Reset obstacles
+    }
+
 
     public float getSpeed()
     {

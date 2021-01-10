@@ -1,12 +1,11 @@
 package dinosaur.entity;
 
-import dinosaur.input.Input;
-import dinosaur.input.InputEvent;
 import dinosaur.math.Vector2;
 import dinosaur.obstacle.Obstacle;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import neat.genome.Genome;
+import neat.network.Network;
 
 import java.util.List;
 
@@ -23,6 +22,9 @@ public class Dinosaur extends Entity
     private static final Vector2 FALL = new Vector2(0, -40).mult(SCALE);
 
 
+    private final Genome genome;
+    private final Network network;
+
     private final List<Obstacle> obstacles;
 
     private Vector2 velocity = new Vector2(0, 0);
@@ -34,22 +36,25 @@ public class Dinosaur extends Entity
     private boolean isDead = false;
 
 
-    public Dinosaur(List<Obstacle> obstacles)
+    public Dinosaur(Genome genome, List<Obstacle> obstacles)
     {
         super(new Vector2(30, 0), STANDING);
 
+        this.genome = genome;
+        network = new Network(genome);
+
         this.obstacles = obstacles;
-
-        Input input = Input.getInstance();
-
-        input.subscribe(InputEvent.KEY_PRESSED, this::onKeyPressed);
-        input.subscribe(InputEvent.KEY_RELEASED, this::onKeyReleased);
     }
 
 
     @Override
     public void update(float delta)
     {
+        // TODO: Gather inputs and feed through network
+
+        isJumping = Math.random() < 0.2;
+        isCrouching = Math.random() < 0.2;
+
         handleMovement(delta);
         integrate(delta);
 
@@ -77,7 +82,6 @@ public class Dinosaur extends Entity
 
     private void integrate(float delta)
     {
-
         // Integrate physics
         velocity = velocity.add(GRAVITY.mult(delta)); // Multiply by delta because gravity is a force
         position = position.add(velocity.mult(delta));
@@ -97,7 +101,11 @@ public class Dinosaur extends Entity
         // Test if dinosaur is colliding with an obstacle
         for (Obstacle obstacle : obstacles)
         {
-            if (obstacle.isIntersecting(this)) isDead = true;
+            if (obstacle.isIntersecting(this))
+            {
+                // TODO: Calculate fitness
+                isDead = true;
+            }
         }
     }
 
@@ -105,33 +113,14 @@ public class Dinosaur extends Entity
     @Override
     public void render(GraphicsContext gc)
     {
-        gc.setFill(Color.color(0, 0, 0, 0.3));
+        gc.setFill(Color.color(0.7, 0.7, 0.7, 0.2));
         gc.fillRect(position.x, position.y, dimensions.x, dimensions.y);
     }
 
 
-    public boolean isDead()
+    public boolean isAlive()
     {
-        return isDead;
-    }
-
-
-    private void onKeyPressed(KeyCode code)
-    {
-        switch (code)
-        {
-            case SPACE, UP -> isJumping = true;
-            case DOWN -> isCrouching = true;
-        }
-    }
-
-    private void onKeyReleased(KeyCode code)
-    {
-        switch (code)
-        {
-            case SPACE, UP -> isJumping = false;
-            case DOWN -> isCrouching = false;
-        }
+        return !isDead;
     }
 
 }

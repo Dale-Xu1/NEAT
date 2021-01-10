@@ -8,6 +8,9 @@ import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import neat.NEAT;
+import neat.genome.Genome;
+import neat.genome.render.GenomeRenderer;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -53,13 +56,15 @@ public class DinosaurGame extends Group
     private final Timer timer = new Timer();
     private final GraphicsContext gc;
 
-    private final int width = 600;
-    private final int height = 150;
+    private final int width = 720;
+    private final int height = 360;
 
     private final float delta = 0.02f;
 
+    private final NEAT neat = new NEAT(500, 5, 2);
+
     private final List<Obstacle> obstacles = new ArrayList<>();
-    private final Dinosaur dinosaur = new Dinosaur(obstacles);
+    private final Dinosaur[] dinosaurs = new Dinosaur[neat.getGenomes().length];
 
     private final ObstacleSpawner spawner = new ObstacleSpawner(obstacles, width);
 
@@ -71,6 +76,13 @@ public class DinosaurGame extends Group
         gc = canvas.getGraphicsContext2D();
 
         getChildren().add(canvas);
+
+        // Initialize dinosaurs
+        Genome[] genomes = neat.getGenomes();
+        for (int i = 0; i < dinosaurs.length; i++)
+        {
+            dinosaurs[i] = new Dinosaur(genomes[i], obstacles);
+        }
 
         // Start timer
         timer.start();
@@ -101,9 +113,14 @@ public class DinosaurGame extends Group
             }
         }
 
-        // Update dinosaur
-        dinosaur.update(delta);
-        if (dinosaur.isDead()) timer.stop();
+        for (Dinosaur dinosaur : dinosaurs)
+        {
+            // Update dinosaur if it isn't dead
+            if (dinosaur.isAlive())
+            {
+                dinosaur.update(delta);
+            }
+        }
     }
 
     private void render()
@@ -126,8 +143,15 @@ public class DinosaurGame extends Group
             obstacle.render(gc);
         }
 
-        dinosaur.render(gc);
+        for (Dinosaur dinosaur : dinosaurs)
+        {
+            if (dinosaur.isAlive()) dinosaur.render(gc);
+        }
+
         gc.restore();
+
+        GenomeRenderer renderer = new GenomeRenderer(neat.getBest());
+        renderer.render(gc, 280, 15, 400, 200);
     }
 
 }
