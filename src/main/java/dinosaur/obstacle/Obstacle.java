@@ -1,5 +1,6 @@
-package dinosaur.entity;
+package dinosaur.obstacle;
 
+import dinosaur.entity.Entity;
 import dinosaur.math.Vector2;
 
 public abstract class Obstacle extends Entity
@@ -12,9 +13,9 @@ public abstract class Obstacle extends Entity
     private final ObstacleSpawner spawner;
 
 
-    protected Obstacle(ObstacleSpawner spawner, Vector2 dimensions, int width)
+    protected Obstacle(ObstacleSpawner spawner, Vector2 position, Vector2 dimensions)
     {
-        super(new Vector2(width, 0), dimensions);
+        super(position, dimensions);
         this.spawner = spawner;
     }
 

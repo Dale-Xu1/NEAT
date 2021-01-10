@@ -1,6 +1,8 @@
 package dinosaur;
 
 import dinosaur.entity.*;
+import dinosaur.obstacle.Obstacle;
+import dinosaur.obstacle.ObstacleSpawner;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;

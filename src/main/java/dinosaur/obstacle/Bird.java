@@ -1,4 +1,4 @@
-package dinosaur.entity;
+package dinosaur.obstacle;
 
 import dinosaur.math.Vector2;
 import javafx.scene.canvas.GraphicsContext;
@@ -7,9 +7,18 @@ import javafx.scene.paint.Color;
 public class Bird extends Obstacle
 {
 
+    private static final Vector2 DIMENSIONS = new Vector2(50, 25);
+
+
+    private static float getY()
+    {
+        return (float) Math.random() * 50 + 5;
+    }
+
+
     public Bird(ObstacleSpawner spawner, int width)
     {
-        super(spawner, new Vector2(100, 100), width);
+        super(spawner, new Vector2(width, getY()), DIMENSIONS);
     }
 
 

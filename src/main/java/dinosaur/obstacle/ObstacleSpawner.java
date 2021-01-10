@@ -1,4 +1,4 @@
-package dinosaur.entity;
+package dinosaur.obstacle;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ public class ObstacleSpawner
 {
 
     private static final float SPEED_INCREASE = 0.02f;
+    private static final double BIRD_CHANCE = 0.1;
 
 
     private static float randomDelay()
@@ -36,8 +37,12 @@ public class ObstacleSpawner
         // Spawn cactus when delay runs out
         if (delay < 0)
         {
+            Obstacle obstacle = (Math.random() < BIRD_CHANCE) ?
+                new Bird(this, width) :
+                new Cactus(this, width);
+
             delay = randomDelay();
-            obstacles.add(new Cactus(this, width));
+            obstacles.add(obstacle);
         }
     }
 

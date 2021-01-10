@@ -1,4 +1,4 @@
-package dinosaur.entity;
+package dinosaur.obstacle;
 
 import dinosaur.math.Vector2;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,7 +18,7 @@ public class Cactus extends Obstacle
 
     public Cactus(ObstacleSpawner spawner, int width)
     {
-        super(spawner, getDimensions(), width);
+        super(spawner, new Vector2(width, 0), getDimensions());
     }
 
 
