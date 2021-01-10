@@ -4,20 +4,14 @@ import dinosaur.math.Vector2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Bird extends Entity
+public class Bird extends Obstacle
 {
 
-    public Bird()
+    public Bird(ObstacleSpawner spawner, int width)
     {
-        super(new Vector2(0, 0), new Vector2(100, 100));
+        super(spawner, new Vector2(100, 100), width);
     }
 
-
-    @Override
-    public void update(float delta)
-    {
-
-    }
 
     @Override
     public void render(GraphicsContext gc)

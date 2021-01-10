@@ -1,7 +1,6 @@
 package dinosaur;
 
-import dinosaur.entity.Dinosaur;
-import dinosaur.entity.Entity;
+import dinosaur.entity.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -9,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class DinosaurGame extends Group
@@ -56,8 +56,10 @@ public class DinosaurGame extends Group
 
     private final float delta = 0.02f;
 
-    private final List<Entity> obstacles = new ArrayList<>();
+    private final List<Obstacle> obstacles = new ArrayList<>();
     private final Dinosaur dinosaur = new Dinosaur();
+
+    private final ObstacleSpawner spawner = new ObstacleSpawner(obstacles, width);
 
 
     public DinosaurGame()
@@ -81,10 +83,20 @@ public class DinosaurGame extends Group
 
     private void update()
     {
+        spawner.update(delta);
+
         // Update entities
-        for (Entity obstacle : obstacles)
+        Iterator<Obstacle> iterator = obstacles.iterator();
+        while (iterator.hasNext())
         {
+            Obstacle obstacle = iterator.next();
             obstacle.update(delta);
+
+            // Remove obstacle if dead
+            if (obstacle.isDead())
+            {
+                iterator.remove();
+            }
         }
 
         dinosaur.update(delta);

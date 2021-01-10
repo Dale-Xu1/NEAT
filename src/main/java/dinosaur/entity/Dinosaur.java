@@ -11,13 +11,13 @@ public class Dinosaur extends Entity
 {
 
     private static final float SCALE = 100;
-    private static final Vector2 GRAVITY = new Vector2(0, -16);
+    private static final Vector2 GRAVITY = new Vector2(0, -16).mult(SCALE);
 
     private static final Vector2 STANDING = new Vector2(30, 50);
     private static final Vector2 CROUCHING = new Vector2(50, 25);
 
-    private static final Vector2 JUMP = new Vector2(0, 5);
-    private static final Vector2 FALL = new Vector2(0, -40);
+    private static final Vector2 JUMP = new Vector2(0, 5).mult(SCALE);
+    private static final Vector2 FALL = new Vector2(0, -40).mult(SCALE);
 
 
     private Vector2 velocity = new Vector2(0, 0);
@@ -46,7 +46,7 @@ public class Dinosaur extends Entity
         if (!isCrouching && isJumping && isGrounded)
         {
             isGrounded = false;
-            velocity = velocity.add(JUMP.mult(SCALE)); // Not multiplying by delta because jump is an impulse
+            velocity = velocity.add(JUMP); // Not multiplying by delta because jump is an impulse
         }
 
         // Change bounding box dimensions when crouching
@@ -55,11 +55,11 @@ public class Dinosaur extends Entity
         if (isCrouching)
         {
             // Fall down when crouching
-            velocity = velocity.add(FALL.mult(SCALE).mult(delta));
+            velocity = velocity.add(FALL.mult(delta));
         }
 
         // Integrate physics
-        velocity = velocity.add(GRAVITY.mult(SCALE).mult(delta)); // Multiply by delta because gravity is a force
+        velocity = velocity.add(GRAVITY.mult(delta)); // Multiply by delta because gravity is a force
         position = position.add(velocity.mult(delta));
 
         if (position.y < 0)

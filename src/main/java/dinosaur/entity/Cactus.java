@@ -4,20 +4,23 @@ import dinosaur.math.Vector2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Cactus extends Entity
+public class Cactus extends Obstacle
 {
 
-    public Cactus()
+    private static Vector2 getDimensions()
     {
-        super(new Vector2(0, 0), new Vector2(100, 100));
+        float y = (float) Math.random();
+        float x = (float) Math.random() * (1 - y); // Higher cacti are thinner on average
+
+        return new Vector2(x * 15 + 25, y * 15 + 35);
     }
 
 
-    @Override
-    public void update(float delta)
+    public Cactus(ObstacleSpawner spawner, int width)
     {
-
+        super(spawner, getDimensions(), width);
     }
+
 
     @Override
     public void render(GraphicsContext gc)
