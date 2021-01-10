@@ -25,8 +25,6 @@ public class Dinosaur extends Entity
     private final Genome genome;
     private final Network network;
 
-    private final List<Obstacle> obstacles;
-
     private Vector2 velocity = new Vector2(0, 0);
 
     private boolean isJumping = false;
@@ -36,29 +34,28 @@ public class Dinosaur extends Entity
     private boolean isDead = false;
 
 
-    public Dinosaur(Genome genome, List<Obstacle> obstacles)
+    public Dinosaur(Genome genome)
     {
         super(new Vector2(30, 0), STANDING);
 
         this.genome = genome;
         network = new Network(genome);
-
-        this.obstacles = obstacles;
     }
 
+
+    public void input(double[] input)
+    {
+        double[] output = network.predict(input);
+
+        isJumping = output[0] > 0.5;
+        isCrouching = output[1] > 0.5;
+    }
 
     @Override
     public void update(float delta)
     {
-        // TODO: Gather inputs and feed through network
-
-        isJumping = Math.random() < 0.2;
-        isCrouching = Math.random() < 0.2;
-
         handleMovement(delta);
         integrate(delta);
-
-        testDead();
     }
 
     private void handleMovement(float delta)
@@ -96,14 +93,14 @@ public class Dinosaur extends Entity
         }
     }
 
-    private void testDead()
+    public void testDead(List<Obstacle> obstacles, float score)
     {
         // Test if dinosaur is colliding with an obstacle
         for (Obstacle obstacle : obstacles)
         {
             if (obstacle.isIntersecting(this))
             {
-                // TODO: Calculate fitness
+                genome.setFitness(score * score);
                 isDead = true;
             }
         }
@@ -117,6 +114,11 @@ public class Dinosaur extends Entity
         gc.fillRect(position.x, position.y, dimensions.x, dimensions.y);
     }
 
+
+    public Genome getGenome()
+    {
+        return genome;
+    }
 
     public boolean isAlive()
     {

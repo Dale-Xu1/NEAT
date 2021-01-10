@@ -68,6 +68,8 @@ public class DinosaurGame extends Group
 
     private final ObstacleSpawner spawner = new ObstacleSpawner(obstacles, width);
 
+    private float score = 0;
+
 
     public DinosaurGame()
     {
@@ -76,16 +78,19 @@ public class DinosaurGame extends Group
         gc = canvas.getGraphicsContext2D();
 
         getChildren().add(canvas);
-
-        // Initialize dinosaurs
-        Genome[] genomes = neat.getGenomes();
-        for (int i = 0; i < dinosaurs.length; i++)
-        {
-            dinosaurs[i] = new Dinosaur(genomes[i], obstacles);
-        }
+        initializeDinosaurs();
 
         // Start timer
         timer.start();
+    }
+
+    private void initializeDinosaurs()
+    {
+        Genome[] genomes = neat.getGenomes();
+        for (int i = 0; i < dinosaurs.length; i++)
+        {
+            dinosaurs[i] = new Dinosaur(genomes[i]);
+        }
     }
 
 
@@ -113,13 +118,45 @@ public class DinosaurGame extends Group
             }
         }
 
+        updateDinosaurs();
+    }
+
+    private void updateDinosaurs()
+    {
+        score += delta;
+
+        // TODO: Gather inputs
+        double[] input =
+        {
+            0, // Distance to next obstacle
+            0, // Width of obstacle
+            0, // Height of obstacle
+            0, // Obstacle's height from ground
+            spawner.getSpeed()
+        };
+
+        boolean next = true;
         for (Dinosaur dinosaur : dinosaurs)
         {
             // Update dinosaur if it isn't dead
             if (dinosaur.isAlive())
             {
+                dinosaur.input(input);
+
                 dinosaur.update(delta);
+                dinosaur.testDead(obstacles, score);
+
+                // Don't move onto next generation if at least one dinosaur is alive
+                next = false;
             }
+        }
+
+        if (next)
+        {
+            neat.nextGeneration();
+
+            spawner.reset();
+            initializeDinosaurs();
         }
     }
 
@@ -150,8 +187,17 @@ public class DinosaurGame extends Group
 
         gc.restore();
 
-        GenomeRenderer renderer = new GenomeRenderer(neat.getBest());
-        renderer.render(gc, 280, 15, 400, 200);
+        // Render network of first genome that is still alive
+        for (Dinosaur dinosaur : dinosaurs)
+        {
+            if (dinosaur.isAlive())
+            {
+                GenomeRenderer renderer = new GenomeRenderer(dinosaur.getGenome());
+                renderer.render(gc, 280, 15, 400, 200);
+
+                break;
+            }
+        }
     }
 
 }

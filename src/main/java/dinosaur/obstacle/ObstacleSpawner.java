@@ -18,14 +18,16 @@ public class ObstacleSpawner
     private final List<Obstacle> obstacles;
     private final int width;
 
-    private float delay = randomDelay();
-    private float speed = 1;
+    private float delay;
+    private float speed;
 
 
     public ObstacleSpawner(List<Obstacle> obstacles, int width)
     {
         this.obstacles = obstacles;
         this.width = width;
+
+        reset();
     }
 
 
@@ -48,7 +50,10 @@ public class ObstacleSpawner
 
     public void reset()
     {
-        // TODO: Reset obstacles
+        obstacles.clear();
+
+        delay = randomDelay();
+        speed = 1;
     }
 
 
