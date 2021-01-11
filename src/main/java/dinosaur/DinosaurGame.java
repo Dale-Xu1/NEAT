@@ -1,6 +1,8 @@
 package dinosaur;
 
 import dinosaur.entity.*;
+import dinosaur.math.Random;
+import dinosaur.math.Vector2;
 import dinosaur.obstacle.Obstacle;
 import dinosaur.obstacle.ObstacleSpawner;
 import javafx.animation.AnimationTimer;
@@ -61,7 +63,7 @@ public class DinosaurGame extends Group
 
     private final float delta = 0.02f;
 
-    private final NEAT neat = new NEAT(500, 5, 2);
+    private final NEAT neat = new NEAT(1000, 5, 2);
 
     private final List<Obstacle> obstacles = new ArrayList<>();
     private final Dinosaur[] dinosaurs = new Dinosaur[neat.getGenomes().length];
@@ -86,6 +88,8 @@ public class DinosaurGame extends Group
 
     private void initializeDinosaurs()
     {
+        Random.setSeed(0);
+
         Genome[] genomes = neat.getGenomes();
         for (int i = 0; i < dinosaurs.length; i++)
         {
@@ -125,17 +129,9 @@ public class DinosaurGame extends Group
     {
         score += delta;
 
-        // TODO: Gather inputs
-        double[] input =
-        {
-            0, // Distance to next obstacle
-            0, // Width of obstacle
-            0, // Height of obstacle
-            0, // Obstacle's height from ground
-            spawner.getSpeed()
-        };
-
+        double[] input = getInput();
         boolean next = true;
+
         for (Dinosaur dinosaur : dinosaurs)
         {
             // Update dinosaur if it isn't dead
@@ -153,11 +149,35 @@ public class DinosaurGame extends Group
 
         if (next)
         {
+            // Reset for next generation
             neat.nextGeneration();
 
             spawner.reset();
             initializeDinosaurs();
         }
+    }
+
+    private double[] getInput()
+    {
+        double[] input = { width, 0, 0, 0, spawner.getSpeed() };
+
+        for (Obstacle obstacle : obstacles)
+        {
+            Vector2 position = obstacle.getPosition();
+            Vector2 dimensions = obstacle.getDimensions();
+
+            if (position.x + dimensions.x > Dinosaur.LEFT)
+            {
+                input[0] = position.x - Dinosaur.LEFT; // Distance to next obstacle
+                input[1] = dimensions.x; // Width of obstacle
+                input[2] = dimensions.y; // Height of obstacle
+                input[3] = position.y; // Obstacle's height from ground
+
+                break;
+            }
+        }
+
+        return input;
     }
 
     private void render()

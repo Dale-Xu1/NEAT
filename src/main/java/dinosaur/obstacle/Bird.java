@@ -1,5 +1,6 @@
 package dinosaur.obstacle;
 
+import dinosaur.math.Random;
 import dinosaur.math.Vector2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -12,7 +13,7 @@ public class Bird extends Obstacle
 
     private static float getY()
     {
-        return (float) Math.random() * 50 + 5;
+        return Random.next() * 50 + 5;
     }
 
 

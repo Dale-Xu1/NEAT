@@ -1,5 +1,6 @@
 package dinosaur.obstacle;
 
+import dinosaur.math.Random;
 import dinosaur.math.Vector2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -7,10 +8,10 @@ import javafx.scene.paint.Color;
 public class Cactus extends Obstacle
 {
 
-    private static Vector2 getDimensions()
+    private static Vector2 createDimensions()
     {
-        float y = (float) Math.random();
-        float x = (float) Math.random() * (1 - y); // Higher cacti are thinner on average
+        float y = Random.next();
+        float x = Random.next() * (1 - y); // Higher cacti are thinner on average
 
         return new Vector2(x * 15 + 25, y * 15 + 35);
     }
@@ -18,7 +19,7 @@ public class Cactus extends Obstacle
 
     public Cactus(ObstacleSpawner spawner, int width)
     {
-        super(spawner, new Vector2(width, 0), getDimensions());
+        super(spawner, new Vector2(width, 0), createDimensions());
     }
 
 

@@ -12,6 +12,8 @@ import java.util.List;
 public class Dinosaur extends Entity
 {
 
+    public static final float LEFT = 30;
+
     private static final float SCALE = 100;
     private static final Vector2 GRAVITY = new Vector2(0, -16).mult(SCALE);
 
@@ -36,7 +38,7 @@ public class Dinosaur extends Entity
 
     public Dinosaur(Genome genome)
     {
-        super(new Vector2(30, 0), STANDING);
+        super(new Vector2(LEFT, 0), STANDING);
 
         this.genome = genome;
         network = new Network(genome);
@@ -114,6 +116,11 @@ public class Dinosaur extends Entity
         gc.fillRect(position.x, position.y, dimensions.x, dimensions.y);
     }
 
+
+    public Vector2 getPosition()
+    {
+        return position;
+    }
 
     public Genome getGenome()
     {

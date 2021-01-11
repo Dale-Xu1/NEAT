@@ -1,5 +1,7 @@
 package dinosaur.obstacle;
 
+import dinosaur.math.Random;
+
 import java.util.List;
 
 public class ObstacleSpawner
@@ -11,7 +13,7 @@ public class ObstacleSpawner
 
     private static float randomDelay()
     {
-        return (float) Math.random() * 1.5f + 0.5f;
+        return Random.next() * 1.5f + 0.5f;
     }
 
 
@@ -39,7 +41,7 @@ public class ObstacleSpawner
         // Spawn cactus when delay runs out
         if (delay < 0)
         {
-            Obstacle obstacle = (Math.random() < BIRD_CHANCE) ?
+            Obstacle obstacle = (Random.next() < BIRD_CHANCE) ?
                 new Bird(this, width) :
                 new Cactus(this, width);
 

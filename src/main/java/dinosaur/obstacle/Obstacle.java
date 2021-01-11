@@ -26,6 +26,17 @@ public abstract class Obstacle extends Entity
         position = position.add(VELOCITY.mult(spawner.getSpeed() * delta));
     }
 
+
+    public Vector2 getPosition()
+    {
+        return position;
+    }
+
+    public Vector2 getDimensions()
+    {
+        return dimensions;
+    }
+
     public boolean isDead()
     {
         return position.x < -dimensions.x;
