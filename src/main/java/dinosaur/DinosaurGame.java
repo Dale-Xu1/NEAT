@@ -88,7 +88,7 @@ public class DinosaurGame extends Group
 
     private void initializeDinosaurs()
     {
-        Random.setSeed(0);
+//        Random.setSeed(0);
 
         Genome[] genomes = neat.getGenomes();
         for (int i = 0; i < dinosaurs.length; i++)
@@ -159,7 +159,7 @@ public class DinosaurGame extends Group
 
     private double[] getInput()
     {
-        double[] input = { width, 0, 0, 0, spawner.getSpeed() };
+        double[] input = { width, 0, 0, 0, spawner.getSpeed() - 1 };
 
         for (Obstacle obstacle : obstacles)
         {
@@ -168,10 +168,10 @@ public class DinosaurGame extends Group
 
             if (position.x + dimensions.x > Dinosaur.LEFT)
             {
-                input[0] = position.x - Dinosaur.LEFT; // Distance to next obstacle
-                input[1] = dimensions.x; // Width of obstacle
+                input[0] = (position.x - Dinosaur.LEFT) / width; // Distance to next obstacle
+                input[1] = (dimensions.x - 25) / 25; // Width of obstacle
                 input[2] = dimensions.y; // Height of obstacle
-                input[3] = position.y; // Obstacle's height from ground
+                input[3] = position.y / 55; // Obstacle's height from ground
 
                 break;
             }
@@ -190,10 +190,6 @@ public class DinosaurGame extends Group
         gc.translate(0, height - 20); // -20 to lift the ground up
         gc.scale(1, -1);
 
-        // Draw ground
-        gc.setStroke(Color.BLACK);
-        gc.strokeLine(0, 0, width, 0);
-
         // Render entities
         for (Entity obstacle : obstacles)
         {
@@ -205,6 +201,9 @@ public class DinosaurGame extends Group
             if (dinosaur.isAlive()) dinosaur.render(gc);
         }
 
+        // Draw ground
+        gc.setStroke(Color.BLACK);
+        gc.strokeLine(0, 0, width, 0);
         gc.restore();
 
         // Render network of first genome that is still alive
