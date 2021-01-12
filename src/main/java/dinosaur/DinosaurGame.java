@@ -1,7 +1,6 @@
 package dinosaur;
 
 import dinosaur.entity.*;
-import dinosaur.math.Random;
 import dinosaur.math.Vector2;
 import dinosaur.obstacle.Obstacle;
 import dinosaur.obstacle.ObstacleSpawner;
@@ -55,7 +54,6 @@ public class DinosaurGame extends Group
     }
 
 
-    private final Timer timer = new Timer();
     private final GraphicsContext gc;
 
     private final int width = 720;
@@ -63,7 +61,7 @@ public class DinosaurGame extends Group
 
     private final float delta = 0.02f;
 
-    private final NEAT neat = new NEAT(1000, 5, 2);
+    private final NEAT neat = new NEAT(1000, 4, 2);
 
     private final List<Obstacle> obstacles = new ArrayList<>();
     private final Dinosaur[] dinosaurs = new Dinosaur[neat.getGenomes().length];
@@ -83,24 +81,17 @@ public class DinosaurGame extends Group
         initializeDinosaurs();
 
         // Start timer
+        Timer timer = new Timer();
         timer.start();
     }
 
     private void initializeDinosaurs()
     {
-//        Random.setSeed(0);
-
         Genome[] genomes = neat.getGenomes();
         for (int i = 0; i < dinosaurs.length; i++)
         {
             dinosaurs[i] = new Dinosaur(genomes[i]);
         }
-    }
-
-
-    public void start()
-    {
-        timer.start();
     }
 
 
@@ -159,7 +150,7 @@ public class DinosaurGame extends Group
 
     private double[] getInput()
     {
-        double[] input = { width, 0, 0, 0, spawner.getSpeed() - 1 };
+        double[] input = { 1, 0, 0, 0 };
 
         for (Obstacle obstacle : obstacles)
         {
@@ -168,10 +159,13 @@ public class DinosaurGame extends Group
 
             if (position.x + dimensions.x > Dinosaur.LEFT)
             {
-                input[0] = (position.x - Dinosaur.LEFT) / width; // Distance to next obstacle
-                input[1] = (dimensions.x - 25) / 25; // Width of obstacle
-                input[2] = dimensions.y; // Height of obstacle
-                input[3] = position.y / 55; // Obstacle's height from ground
+                input = new double[]
+                {
+                    (position.x - Dinosaur.LEFT) / (width - Dinosaur.LEFT), // Distance to next obstacle
+                    (dimensions.x - 25) / 25, // Width of obstacle
+                    dimensions.y, // Height of obstacle
+                    position.y / 55 // Obstacle's height from ground
+                };
 
                 break;
             }
