@@ -163,7 +163,7 @@ public class DinosaurGame extends Group
                 {
                     (position.x - Dinosaur.LEFT) / (width - Dinosaur.LEFT), // Distance to next obstacle
                     (dimensions.x - 25) / 25, // Width of obstacle
-                    dimensions.y, // Height of obstacle
+                    (dimensions.y - 25) / 25, // Height of obstacle
                     position.y / 55 // Obstacle's height from ground
                 };
 

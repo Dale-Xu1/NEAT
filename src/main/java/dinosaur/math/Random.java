@@ -11,9 +11,4 @@ public class Random
         return random.nextFloat();
     }
 
-    public static void setSeed(long seed)
-    {
-        random.setSeed(seed);
-    }
-
 }
