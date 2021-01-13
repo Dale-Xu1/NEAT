@@ -14,8 +14,8 @@ public class NEAT
     public static final int MIN_NORMAL = 20; // Minimum gene length where normalizer is 1
     public static final int COPY_GENOME = 5; // Minimum genomes in a species for the best to be copied
     public static final double DISJOINT = 1; // How much disjoint genes contribute to distance
-    public static final double WEIGHTS = 0.4; // How much weight differences contribute to distance
-    public static final double THRESHOLD = 3; // Distance threshold for whether is genome is part of a species
+    public static final double WEIGHTS = 3; // How much weight differences contribute to distance
+    public static final double THRESHOLD = 4; // Distance threshold for whether is genome is part of a species
 
     public static final double MUTATE_WEIGHT = 0.8; // Chance of mutating a weight
     public static final double RESET_WEIGHT = 0.1; // Chance of resetting a weight (When it is being mutated)
@@ -104,10 +104,14 @@ public class NEAT
 
     private void nextGenomes()
     {
-        // Initialize species selector
-        Selector<Species> selector = new Selector<>(random, species);
-        for (Species species : species) species.calculateFitness();
+        // Calculate average fitness of each species
+        for (Species species : species)
+        {
+            species.calculateFitness();
+        }
 
+        // Create species selector
+        Selector<Species> selector = new Selector<>(random, species);
         for (int i = 0; i < genomes.length; i++)
         {
             // Select random species and create child
@@ -125,7 +129,9 @@ public class NEAT
         for (Species species : species)
         {
             // Create new species with old species's best genome as representative
-            Genome best = new Genome(species.getBest());
+            Genome best = species.getBest();
+            best.setFitness(0);
+
             next.add(new Species(this, best));
         }
 

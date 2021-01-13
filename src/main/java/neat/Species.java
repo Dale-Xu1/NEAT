@@ -50,35 +50,35 @@ public class Species implements Selectable
         {
             // Copy best genome to next generation
             copyBest = false;
-            return new Genome(getBest());
+            return getBest();
         }
 
-        Genome child;
-        if (random.nextDouble() < NEAT.NO_CROSSOVER)
+        // Create child
+        Genome child = (random.nextDouble() < NEAT.NO_CROSSOVER) ? new Genome(selector.select()) : crossover();
+        child.mutate(); // Wow this sounds weird
+
+        return child;
+    }
+
+    private Genome crossover()
+    {
+        // Select parents
+        Genome parent1 = selector.select();
+        Genome parent2 = selector.select();
+
+        if (parent2.getFitness() > parent1.getFitness())
         {
-            // Select random genome and copy it
-            child = new Genome(selector.select());
-        }
-        else
-        {
-            Genome parent1 = selector.select();
-            Genome parent2 = selector.select();
+            // Swap so that parent1 is fitter
+            Genome temp = parent1;
 
-            // Copy fitter of two parents and crossover with the other
-            if (parent1.getFitness() > parent2.getFitness())
-            {
-                child = new Genome(parent1);
-                child.crossover(parent2);
-            }
-            else
-            {
-                child = new Genome(parent2);
-                child.crossover(parent1);
-            }
+            parent1 = parent2;
+            parent2 = temp;
         }
 
-        // Wow this sounds weird
-        child.mutate();
+        // Copy parent and crossover with the other
+        Genome child = new Genome(parent1);
+        child.crossover(parent2);
+
         return child;
     }
 
